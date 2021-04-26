@@ -16,3 +16,4 @@ https://stackoverflow.com/questions/17348480/how-do-i-prevent-sqlite-database-lo
 https://stackoverflow.com/questions/30438595/sqlite3-ignores-sqlite3-busy-timeout  
 https://stackoverflow.com/questions/4101837/avoiding-sqlite3-database-locked  
 https://stackoverflow.com/questions/24598721/how-can-i-check-if-sqlite-database-is-open-in-c-c  
+https://aroundck.tistory.com/5203?category=648786  
