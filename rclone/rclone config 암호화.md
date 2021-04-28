@@ -1,0 +1,76 @@
+# rclone config 암호화.md
+- lsd가 아닌 sync나 copy를 위해선 config 파일을 반드시 만들어야한다.
+- url에 계정정보를 포함하는 경우 config 는 암호화가 필요할 것이다.
+- WINDOWS의 config 기본 경로 : %userprofile%\.config\rclone\rclone.conf 
+- 기본 config가 아닌 특정 경로에 conf를 별도로 만들고 암호화해서 관리해보자.
+- 이 방식을 통해 암호화된 conf 를 미리 생성하고 conf의 접속정보는 유동적으로 변경할 수 있게된다.
+
+## 개인 config 만들기
+```
+rclone config create MYINFO http --config C:\path\to\my.conf
+```
+## config 암호화하기
+```
+> rclone config --config C:\path\to\my.conf
+Current remotes:
+
+Name                 Type
+====                 ====
+MYINFO               http
+
+e) Edit existing remote
+n) New remote
+d) Delete remote
+r) Rename remote
+c) Copy remote
+s) Set configuration password
+q) Quit config
+e/n/d/r/c/s/q> s
+Your configuration is not encrypted.
+If you add a password, you will protect your login information to cloud services.
+a) Add Password
+q) Quit to main menu
+a/q> a
+Enter NEW configuration password:
+password:
+Confirm NEW configuration password:
+password:
+Password set
+Your configuration is encrypted.
+c) Change Password
+u) Unencrypt configuration
+q) Quit to main menu
+c/u/q> q
+Current remotes:
+
+Name                 Type
+====                 ====
+MYINFO               http
+
+e) Edit existing remote
+n) New remote
+d) Delete remote
+r) Rename remote
+c) Copy remote
+s) Set configuration password
+q) Quit config
+e/n/d/r/c/s/q> q
+```
+
+## config 업데이트 하기
+
+```
+> rclone config create MYINFO http url https://user:pass@host:port --config C:\path\to\my.conf
+Enter configuration password:
+password:
+```
+- 암호화했기 때문에 암호를 물어본다
+
+```
+rclone config create MY_INFO http url https://user:pass@host:port --config C:\path\to\my.conf --password-commnd "cmd /c echo 1234"
+```
+- 암호도 command로 처리할 수 있음
+- cmd /c echo 를 사용하는 이유는 --password-command 로 받는 인자에 대한 명령 실행이 %PATH% 환경변수를 참조하는데
+- 즉, 어떤 쉘을 사용할지 명시 해야한다는 의미이다. ( cmd 나 powershell 같은 )
+
+
