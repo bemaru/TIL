@@ -75,3 +75,88 @@ auto를 지정하면 레퍼런스와 const 한정자가 사라지기 때문에 f
 ```c++
 const auto& f2 = foo(); // 복제방지
 ```
+
+decltype 키워드는 인수로 지정한 표현식의 타입을 알아낸다.
+```c++
+int x = 123;
+decltype(y) y = 456;
+```
+decltyped은 레퍼런스나 const 지정자를 삭제하지 않는다는 점에서 auto와 다르다.
+```c++
+decltype(foo()) f2 = foo();
+```
+
+클래스란 객체의 특성을 정의한 것이다.
+데이터 멤버와 메서드 마다 public, protected, private 등으로 접근 수준을 지정한다.
+
+cosnt-정확성 원칙(**const-correctness principle**)에 따르면 객체의 데이터 멤버 값을 변경하지 않는 함수는
+항상  const로 지정하는 것이 좋다. 이렇게 지정한 멤버 함수를 '인스펙터(inspector), 접근자(accessor) 또는 게터(getter)'라 부르며,
+non-const 멤버 함수를 '뮤테이터(mutator, 변경자)'라 부른다.
+
+생서자와 형태는 같지만 앞에 **틸테(~)**를 붙인 메서드를 소멸자라 부른다.
+
+생성자로 데이터 멤버를 초기화하는 방법은 두 가지다. 권장하는 방법은 생성자 이니셜라이저(**ctor 이니셜라이저**)를 사용하는 것으로,
+생성자 이름 뒤에 콜론(:)을 붙여서 표현한다.
+
+ctor에서 데이터 멤버 초기화만 하고 다른일은 하지 않는다면 굳이 ctor를 따로 정의할 필요는 없다.
+클래스를 정의하는 코드 안에서 곧바로 데이터 멤버를 초기화해도 되기 때문이다.
+
+dtor도 실제로 하는일이 없다면 굳이 작성할 필요는 없다.
+
+1.4 유니폼 초기화
+C++11 이전에는 타입 초기화 방식이 일정하지 않았다.
+```c++
+CircleStruct myCircle1 = {10, 10, 2, 5};
+CircleClass myCircle2(10, 10, 2, 5);
+```
+C++ 11부터 타입 초기화 {...}문법을 사용하는 유니폼 초기화(uniform initialization)를 따르도록 통일됐다.
+```
+CircleClass mCircle4 = {10, 10, 2, 5};
+CircleClass mCircle6{10, 10, 2, 5};
+int c = {3};
+int d{3};
+int e{};
+```
+니폼 초기화를 사용하면 축소 변환(narrowing)을 방지할 수 있다. 
+```c++
+void func(int i) { /* ... */ }
+
+int main()
+{
+ int x = {3.14}; // 축소로 인한 에러
+ func({3.14}); // 축소로 인한 에러
+}
+```
+
+```c++
+int* pArray = new int[4]{0, 1, 2, 3};
+```
+
+1.4.1 직접 리스트 초기화와 복제 리스트 초기화
+복제 리스트 초기화(copy list initialization) : T obj = {arg1, arg2, ...};
+직접 리스트 초기화(direct list initialization) : T obj {arg1, arg2, ...};
+
+C++17부터는 auto 타입 추론 기능과 관련하여 복제 리스트 초기화와 직접 리스트 초기화가 크게 달라졌다.  
+C++17 이전(C++11/14)에는 복제 리스트 초기화와 직접 리스트 초기화 모두 initializer_list<>로 처리했다.
+```c++
+// 복제 리스트 초기화
+auto b = {11};  // initializer_list<int>
+auto b = {11, 22};  // initializer_list<int>
+
+auto c {11};   // initializer_list<int>
+auto d {11, 22};  // initializer_list<int>
+```
+
+C++17부터는 auto는 직접 리스트 초기화에 대해 값 하나만 추론한다.
+```c++
+// 복제 리스트 초기화
+auto b = {11};  // initializer_list<int>
+auto b = {11, 22};  // initializer_list<int>
+
+auto c {11};   // int
+auto d {11, 22};  // 원소가 너무 많다는 에러가 발생한다.
+```
+복제 리스트 초기화에서 중괄호 안에 나온 원소는 반드시 타입이 모두 같아야 한다.
+```c++
+auto b = {11, 22.33}; // 컴파일 에러
+```
