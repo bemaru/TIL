@@ -1,3 +1,14 @@
 Unchoked Peer 개수에 따른 BitTorrent 성능 분석
 
 https://www.koreascience.or.kr/article/JAKO201033062370123.page  
+
+
+
+
+
+Interested and Choked
+ A is marked as interested in peer B when B has pieces
+that A wants, and vice versa. Also, A is choked, when B
+decides not to upload data when A is interested. When B
+is willing to upload again, A is unchoked.
+https://www.it.lut.fi/wiki/lib/exe/fetch.php/courses/ct30a6900/p2p_lecture05.pdf
